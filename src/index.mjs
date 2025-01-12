@@ -6,16 +6,14 @@ export default {
         }
 
         try {
-            const cookie = env.COOKIE
-            request.headers.set('cookie', cookie)
             const { pathname } = new URL(request.url);
             switch (pathname) {
                 case pathname.endsWith('/eapi/book/search'):
                     assert(request.method === 'POST');
-                    return handleSearch(request);
+                    return handleSearch(request, env);
                 case pathname.endsWith('/file'):
                     assert(request.method === 'GET');
-                    return handleGetDownloadLink(request)
+                    return handleGetDownloadLink(request, env)
                 default:
                     throw new HttpError("404 Not Found", 404);
             }
@@ -27,7 +25,7 @@ export default {
 
 const BASE_URL = "https://zh.z-lib.gs"
 
-async function handleSearch(request) {
+async function handleSearch(request, env) {
     const response = await fetch(`${BASE_URL}/eapi/book/search`, {
         method: 'POST',
         body: JSON.stringify({
@@ -38,20 +36,20 @@ async function handleSearch(request) {
         headers: {
             'content-type': 'application/x-www-form-urlencoded',
             'user-agent': 'cli',
-            'cookie': request.headers.get('cookie') || ''
+            'cookie': env.COOKIE || ''
         }
     })
 
     return new Response(body, fixCors(response));
 }
 
-async function handleGetDownloadLink(request) {
+async function handleGetDownloadLink(request, env) {
     const { pathname } = new URL(request.url);
     const response = await fetch(`${BASE_URL}/${pathname}`, {
         method: 'GET',
         headers: {
             'user-agent': 'cli',
-            'cookie': request.headers.get('cookie') || ''
+            'cookie': env.COOKIE || ''
         }
     })
 
