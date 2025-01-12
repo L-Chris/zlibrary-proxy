@@ -7,7 +7,7 @@ export default {
 
         try {
             const { pathname } = new URL(request.url);
-            switch (pathname) {
+            switch (true) {
                 case pathname.endsWith('/eapi/book/search'):
                     assert(request.method === 'POST');
                     return handleSearch(request, env);
@@ -40,6 +40,11 @@ async function handleSearch(request, env) {
         }
     })
 
+    let { body } = response;
+    if (response.ok) {
+        body = await response.json()
+    }
+
     return new Response(body, fixCors(response));
 }
 
@@ -52,6 +57,14 @@ async function handleGetDownloadLink(request, env) {
             'cookie': env.COOKIE || ''
         }
     })
+
+    let { body } = response;
+    if (response.ok) {
+        const json = await response.json()
+        body = JSON.stringify({
+            url: json.file.downloadLink
+        })
+    }
 
     return new Response(body, fixCors(response));
 }
