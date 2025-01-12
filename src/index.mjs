@@ -50,7 +50,7 @@ async function handleSearch(request, env) {
 
 async function handleGetDownloadLink(request, env) {
     const { pathname } = new URL(request.url);
-    const response = await fetch(`${BASE_URL}/${pathname}`, {
+    const response = await fetch(`${BASE_URL}${pathname}`, {
         method: 'GET',
         headers: {
             'user-agent': 'cli',
