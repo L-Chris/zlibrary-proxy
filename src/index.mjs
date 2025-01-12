@@ -94,5 +94,5 @@ const assert = (success) => {
 
 const errHandler = (err) => {
     console.error(err);
-    return new Response(err.message, fixCors({ status: err.status ? ? 500 }));
+    return new Response(err.message, fixCors({ status: err.status || 500 }));
 };
