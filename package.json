@@ -7,6 +7,9 @@
         "dev": "wrangler dev",
         "deploy": "wrangler deploy"
     },
+    "dependencies": {
+        "@whatwg-node/server": "0.9"
+    },
     "devDependencies": {
         "wrangler": "^3.0.0"
     }
